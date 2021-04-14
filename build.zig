@@ -13,7 +13,7 @@ pub fn build(b: *Builder) void {
     const exe = b.addExecutable("firmware.elf", "src/startup.zig");
     exe.setTarget(target);
     exe.setBuildMode(b.standardReleaseOptions());
-    exe.setLinkerScriptPath("arm_cm3.ld");
+    exe.setLinkerScriptPath("LPC812.ld");
     exe.setOutputDir(".");
 
     exe.install();
