@@ -1,6 +1,6 @@
 const builtin = @import("builtin");
+const main = @import("main.zig");
 
-extern fn main() void;
 extern var __text_end: u32;
 extern var __data_start: u32;
 extern var __data_size: u32;
@@ -19,7 +19,7 @@ export fn Reset_Handler() void {
     const bss = @ptrCast([*]u8, &__bss_start);
     for (bss[0..bss_size]) |*b| b.* = 0;
     // start
-    main();
+    main.main();
 }
 
 export fn BusyDummy_Handler() void {

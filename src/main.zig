@@ -1,6 +1,6 @@
 usingnamespace @import("stm32f10.zig");
 
-export fn main() void {
+pub export fn main() void {
     SystemInit();
     RCC.*.APB2ENR |= RCC_APB2Periph_GPIOC; // enable GPIOC clk
     GPIOC.*.CRH &= ~@as(u32, 0b1111 << 20); // PC13
