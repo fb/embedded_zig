@@ -1,10 +1,6 @@
 /* Linker script for mbed LPC812-GCC-ARM based on LPC824.ld */
 
-#if !defined(MBED_BOOT_STACK_SIZE)
-    #define MBED_BOOT_STACK_SIZE 0x400
-#endif
-
-STACK_SIZE = MBED_BOOT_STACK_SIZE;
+STACK_SIZE = 0x400;
 
 /* Linker script to configure memory regions. */
 MEMORY
@@ -42,6 +38,16 @@ MEMORY
  */
 ENTRY(Reset_Handler)
 
+PROVIDE(NMI_Handler = BusyDummy_Handler);
+PROVIDE(HardFault_Handler = BusyDummy_Handler);
+PROVIDE(MemManage_Handler = BusyDummy_Handler);
+PROVIDE(BusFault_Handler = BusyDummy_Handler);
+PROVIDE(UsageFault_Handler = BusyDummy_Handler);
+PROVIDE(SVC_Handler = Dummy_Handler);
+PROVIDE(DebugMon_Handler = Dummy_Handler);
+PROVIDE(PendSV_Handler = Dummy_Handler);
+PROVIDE(SysTick_Handler = Dummy_Handler);
+
 SECTIONS
 {
     .text :
@@ -72,6 +78,7 @@ SECTIONS
 
         KEEP(*(.eh_frame*))
     } > FLASH
+    __text_end = .;
 
     .ARM.extab :
     {
@@ -89,7 +96,7 @@ SECTIONS
 
     .data : AT (__etext)
     {
-        __data_start__ = .;
+        __data_start = .;
         *(vtable)
         *(.data*)
 
@@ -119,14 +126,16 @@ SECTIONS
         __data_end__ = .;
 
     } > RAM
+    __data_size = SIZEOF(.data);
 
     .bss :
     {
-        __bss_start__ = .;
+        __bss_start = .;
         *(.bss*)
         *(COMMON)
         __bss_end__ = .;
     } > RAM
+    __bss_size = SIZEOF(.data);
 
     .heap :
     {
